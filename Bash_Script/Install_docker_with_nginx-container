@@ -31,7 +31,7 @@ sudo yum install docker
 sudo service docker start
 sudo systemctl enable docker
 sudo usermod -a -G docker ec2-user
-echo "Hi I am docker nginx in Amazon Linux">$PWD/index.html
+echo "Hi I am docker nginx in Amazon Linux">index.html
 echo -e "FROM nginx\nCOPY index.html /usr/share/nginx/html/index.html\nCOPY index.html /usr/share/nginx/html/50x.html\nEXPOSE 80\nCMD [\"nginx\", \"-g\", \"daemon off;\"]">Dockerfile
 docker build -t custom_nginx -f Dockerfile .
 docker run -tid -p 80:80 custom_nginx
