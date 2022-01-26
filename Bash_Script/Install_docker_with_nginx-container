@@ -3,6 +3,7 @@
 ID=$(grep -oP '(?<=^ID_LIKE=).+' /etc/os-release | tr -d '"')
 echo $ID
 var="debian"
+
 if [ "$ID" = "$var" ]; then
 sudo apt-get update -y
 sudo apt-get install ca-certificates curl gnupg lsb-release
@@ -20,8 +21,9 @@ newgrp docker
 echo "Hi I am docker nginx in Ubuntu">index.html
 echo -e "FROM nginx\nCOPY index.html /usr/share/nginx/html/index.html\nCOPY index.html /usr/share/nginx/html/50x.html\nEXPOSE 80\nCMD [\"nginx\", \"-g\", \"daemon off;\"]">Dockerfile
 docker build -t custom_nginx -f Dockerfile .
-docker run -tid -p 82:80 custom_nginx
+docker run -tid -p 80:80 custom_nginx
 docker run -tid -p 81:80 nginx
+
 else
 sudo yum update -y
 sudo amazon-linux-extras install docker
@@ -32,6 +34,6 @@ sudo usermod -a -G docker ec2-user
 echo "Hi I am docker nginx in Amazon Linux">$PWD/index.html
 echo -e "FROM nginx\nCOPY index.html /usr/share/nginx/html/index.html\nCOPY index.html /usr/share/nginx/html/50x.html\nEXPOSE 80\nCMD [\"nginx\", \"-g\", \"daemon off;\"]">Dockerfile
 docker build -t custom_nginx -f Dockerfile .
-docker run -tid -p 82:80 custom_nginx
+docker run -tid -p 80:80 custom_nginx
 docker run -tid -p 81:80 nginx
 fi
