@@ -3,6 +3,7 @@
 ID=$(grep -oP '(?<=^ID_LIKE=).+' /etc/os-release | tr -d '"')
 echo $ID
 var="debian"
+
 if [ "$ID" = "$var" ]; then
 sudo apt-get update
 sudo apt-get install apache2
@@ -10,6 +11,7 @@ sudo systemctl start apache2
 sudo systemctl enable apache2
 cd /var/www/html
 echo "This is ubuntu" > index.html
+
 else
 sudo yum update -y
 sudo yum install -y httpd.x86_64
