@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 ID=$(grep -oP '(?<=^ID_LIKE=).+' /etc/os-release | tr -d '"')
 echo $ID
 var="debian"
