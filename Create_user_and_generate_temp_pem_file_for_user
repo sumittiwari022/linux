@@ -1,0 +1,27 @@
+(1) 
+Create a new user
+$ useradd -m devops
+
+(2)
+Generate the ssh-key pair
+$ ssh-keygen -t rsa -b 2048
+
+(3) 
+Generate RSA pem file
+$ ssh-keygen -p -m PEM -f ~/.ssh/id_rsa
+
+(4) 
+Adding public key to authorized_keys
+$ cat id_rsa.pub >> /home/devops/.ssh/authorized_keys
+(Assuming we are in the .ssh/ directory)
+
+(5) 
+Create user distribution pem file
+$ cp id_rsa ~/key.pem
+
+(6) 
+Granting read access to the owner
+$ chmod 400 key.pem
+
+(7) 
+Share the pem key to the authorized users
