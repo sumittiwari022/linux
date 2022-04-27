@@ -9,7 +9,7 @@ var="debian"
 if [ "$ID" = "$var" ]; then
 sudo adduser --no-create-home --disabled-login --shell /bin/false node_exporter
 echo "user added"
-wget https://github.com/prometheus/node_exporter/releases/download/v1.1.2/node_exporter-1.1.2.linux-386.tar.gz
+curl -LO https://github.com/prometheus/node_exporter/releases/download/v1.1.2/node_exporter-1.1.2.linux-386.tar.gz
 echo "wget done"
 tar -xvzf node_exporter-1.1.2.linux-386.tar.gz
 echo "tar done"
