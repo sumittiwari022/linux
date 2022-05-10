@@ -1,0 +1,61 @@
+#!/bin/bash
+
+set -e
+ID=$(grep -oP '(?<=^ID_LIKE=).+' /etc/os-release | tr -d '"')
+echo $ID
+var="debian"
+if [ "$ID" = "$var" ]; then
+#install perl
+sudo apt-get update
+sudo apt-get install -y wget unzip
+sudo apt-get install libwww-perl libdatetime-perl
+mkdir cloudwatch
+cd cloudwatch
+#Download the monitoring scripts
+wget https://aws-cloudwatch.s3.amazonaws.com/downloads/CloudWatchMonitoringScripts-1.2.2.zip
+#Unzip the file
+unzip CloudWatchMonitoringScripts-1.2.2.zip
+#Remove the zip file
+sudo rm -rf CloudWatchMonitoringScripts-1.2.2.zip
+#Go to aws-scripts-mon folder
+cd aws-scripts-mon/
+
+./mon-put-instance-data.pl -mem-used-incl-cache-buff -mem-util -mem-used -mem-avail -disk-space-uti -disk-space-used -disk-space-avail -disk-path=/ 
+
+#copy of all the current cronjobs jobs
+cd
+crontab -l > crontab_new || true
+sudo echo "* * * * * /home/ubuntu/cloudwatch/aws-scripts-mon/mon-put-instance-data.pl -mem-used-incl-cache-buff -mem-util -mem-used -mem-avail -disk-space-uti -disk-space-used -disk-space-avail -disk-path=/ --from-cron" >> crontab_new
+#Now copy the contab_new content to crontab
+crontab crontab_new
+#Since the crontab_new file is temporary, we can remove it
+rm crontab_new
+
+else
+sudo yum update -y
+sudo yum install -y perl-Switch perl-DateTime perl-Sys-Syslog perl-LWP-Protocol-https perl-Digest-SHA.x86_64
+mkdir cloudwatch
+cd cloudwatch
+
+sudo yum install -y wget unzip
+
+#Download the monitoring scripts
+wget https://aws-cloudwatch.s3.amazonaws.com/downloads/CloudWatchMonitoringScripts-1.2.2.zip
+#Unzip the file
+unzip CloudWatchMonitoringScripts-1.2.2.zip
+#Remove the zip file
+sudo rm -rf CloudWatchMonitoringScripts-1.2.2.zip
+#Go to aws-scripts-mon folder
+cd aws-scripts-mon/
+
+./mon-put-instance-data.pl -mem-used-incl-cache-buff -mem-util -mem-used -mem-avail -disk-space-uti -disk-space-used -disk-space-avail -disk-path=/ 
+
+#copy of all the current cronjobs jobs
+cd
+crontab -l > crontab_new || true
+sudo echo "* * * * * /home/ubuntu/cloudwatch/aws-scripts-mon/mon-put-instance-data.pl -mem-used-incl-cache-buff -mem-util -mem-used -mem-avail -disk-space-uti -disk-space-used -disk-space-avail -disk-path=/ --from-cron" >> crontab_new
+#Now copy the contab_new content to crontab
+crontab crontab_new
+#Since the crontab_new file is temporary, we can remove it
+rm crontab_new
+fi
