@@ -53,7 +53,7 @@ cd aws-scripts-mon/
 #copy of all the current cronjobs jobs
 cd
 crontab -l > crontab_new || true
-sudo echo "* * * * * /home/ubuntu/cloudwatch/aws-scripts-mon/mon-put-instance-data.pl -mem-used-incl-cache-buff -mem-util -mem-used -mem-avail -disk-space-uti -disk-space-used -disk-space-avail -disk-path=/ --from-cron" >> crontab_new
+sudo echo "* * * * * /home/ec2-user/cloudwatch/aws-scripts-mon/mon-put-instance-data.pl -mem-used-incl-cache-buff -mem-util -mem-used -mem-avail -disk-space-uti -disk-space-used -disk-space-avail -disk-path=/ --from-cron" >> crontab_new
 #Now copy the contab_new content to crontab
 crontab crontab_new
 #Since the crontab_new file is temporary, we can remove it
